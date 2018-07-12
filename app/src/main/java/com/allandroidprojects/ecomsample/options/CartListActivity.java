@@ -2,6 +2,7 @@ package com.allandroidprojects.ecomsample.options;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.product.ItemDetailsActivity;
@@ -27,6 +29,9 @@ import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRI
 
 public class CartListActivity extends AppCompatActivity {
     private static Context mContext;
+    TextView checkOutAction;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,7 @@ public class CartListActivity extends AppCompatActivity {
         mContext = CartListActivity.this;
 
         ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-        ArrayList<String> cartlistImageUri =imageUrlUtils.getCartListImageUri();
+        ArrayList<String> cartlistImageUri = imageUrlUtils.getCartListImageUri();
         //Show cart layout based on items
         setCartLayout();
 
@@ -55,12 +60,16 @@ public class CartListActivity extends AppCompatActivity {
             public final View mView;
             public final SimpleDraweeView mImageView;
             public final LinearLayout mLayoutItem, mLayoutRemove , mLayoutEdit;
+            TextView actualPrice, discountPercentage;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mImageView = (SimpleDraweeView) view.findViewById(R.id.image_cartlist);
                 mLayoutItem = (LinearLayout) view.findViewById(R.id.layout_item_desc);
+                actualPrice =  view.findViewById(R.id.actual_price);
+                actualPrice.setPaintFlags(actualPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+                discountPercentage =  view.findViewById(R.id.discount_percentage);
                 mLayoutRemove = (LinearLayout) view.findViewById(R.id.layout_action1);
                 mLayoutEdit = (LinearLayout) view.findViewById(R.id.layout_action2);
             }
@@ -133,12 +142,20 @@ public class CartListActivity extends AppCompatActivity {
         LinearLayout layoutCartItems = (LinearLayout) findViewById(R.id.layout_items);
         LinearLayout layoutCartPayments = (LinearLayout) findViewById(R.id.layout_payment);
         LinearLayout layoutCartNoItems = (LinearLayout) findViewById(R.id.layout_cart_empty);
+        checkOutAction = findViewById(R.id.text_action_bottom2);
 
-        if(MainActivity.notificationCountCart >0){
+        if (MainActivity.notificationCountCart >0) {
             layoutCartNoItems.setVisibility(View.GONE);
             layoutCartItems.setVisibility(View.VISIBLE);
             layoutCartPayments.setVisibility(View.VISIBLE);
-        }else {
+            checkOutAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), CheckOutActivity.class));
+                }
+            });
+
+        } else {
             layoutCartNoItems.setVisibility(View.VISIBLE);
             layoutCartItems.setVisibility(View.GONE);
             layoutCartPayments.setVisibility(View.GONE);

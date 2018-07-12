@@ -1,11 +1,16 @@
 package com.allandroidprojects.ecomsample.startup;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.miscellaneous.EmptyActivity;
@@ -22,6 +29,8 @@ import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
 import com.allandroidprojects.ecomsample.options.CartListActivity;
 import com.allandroidprojects.ecomsample.options.SearchResultActivity;
 import com.allandroidprojects.ecomsample.options.WishlistActivity;
+import com.merhold.extensiblepageindicator.ExtensiblePageIndicator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,18 +41,39 @@ public class MainActivity extends AppCompatActivity
     static ViewPager viewPager;
     static TabLayout tabLayout;
 
+    private SliderImageFragmentAdapter mSliderImageFragmentAdapter;
+    private ViewPager mViewPager;
+    private ExtensiblePageIndicator extensiblePageIndicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle(null);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        toggle.setDrawerIndicatorEnabled(false);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu_white_24dp, getApplicationContext().getTheme());
+        toggle.setHomeAsUpIndicator(drawable);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerVisible(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -56,15 +86,19 @@ public class MainActivity extends AppCompatActivity
             tabLayout.setupWithViewPager(viewPager);
         }
 
+        /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });*/
 
-      /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        initCollapsingToolbar();
+        getViewpagerFragment();
+
+
     }
 
     @Override
@@ -95,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         // Get the notifications MenuItem and
         // its LayerDrawable (layer-list)
         MenuItem item = menu.findItem(R.id.action_cart);
-        NotificationCountSetClass.setAddToCart(MainActivity.this, item,notificationCountCart);
+        NotificationCountSetClass.setAddToCart(MainActivity.this, item, notificationCountCart);
         // force the ActionBar to relayout its MenuItems.
         // onCreateOptionsMenu(Menu) will be called again.
         invalidateOptionsMenu();
@@ -172,17 +206,17 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_item1) {
             viewPager.setCurrentItem(0);
-        } else if (id == R.id.nav_item2) {
-            viewPager.setCurrentItem(1);
-        } else if (id == R.id.nav_item3) {
-            viewPager.setCurrentItem(2);
-        } else if (id == R.id.nav_item4) {
-            viewPager.setCurrentItem(3);
-        } else if (id == R.id.nav_item5) {
-            viewPager.setCurrentItem(4);
-        }else if (id == R.id.nav_item6) {
-            viewPager.setCurrentItem(5);
-        }else if (id == R.id.my_wishlist) {
+//        } else if (id == R.id.nav_item2) {
+//            viewPager.setCurrentItem(1);
+//        } else if (id == R.id.nav_item3) {
+//            viewPager.setCurrentItem(2);
+//        } else if (id == R.id.nav_item4) {
+//            viewPager.setCurrentItem(3);
+//        } else if (id == R.id.nav_item5) {
+//            viewPager.setCurrentItem(4);
+//        }else if (id == R.id.nav_item6) {
+//            viewPager.setCurrentItem(5);
+        } else if (id == R.id.my_wishlist) {
             startActivity(new Intent(MainActivity.this, WishlistActivity.class));
         }else if (id == R.id.my_cart) {
             startActivity(new Intent(MainActivity.this, CartListActivity.class));
@@ -223,4 +257,45 @@ public class MainActivity extends AppCompatActivity
             return mFragmentTitles.get(position);
         }
     }
+
+    private void initCollapsingToolbar() {
+        final CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.slider_layout);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        appBarLayout.setExpanded(true);
+
+        // hiding & showing the title when toolbar expanded & collapsed
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+//                    collapsingToolbar.setTitle(getString(R.string.app_name));
+                    isShow = true;
+                } else if (isShow) {
+//                    collapsingToolbar.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
+    public void getViewpagerFragment() {
+        extensiblePageIndicator = (ExtensiblePageIndicator) findViewById(R.id.flexibleIndicator);
+        mSliderImageFragmentAdapter = new SliderImageFragmentAdapter(getSupportFragmentManager());
+
+        mSliderImageFragmentAdapter.addFragment(SliderImageFragment.newInstance(R.color.frag1, R.drawable.char1));
+        mSliderImageFragmentAdapter.addFragment(SliderImageFragment.newInstance(R.color.frag2, R.drawable.char2));
+        mSliderImageFragmentAdapter.addFragment(SliderImageFragment.newInstance(R.color.frag3, R.drawable.char3));
+
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSliderImageFragmentAdapter);
+        extensiblePageIndicator.initViewPager(mViewPager);
+    }
+
 }
