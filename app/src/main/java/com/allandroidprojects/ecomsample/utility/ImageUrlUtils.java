@@ -242,7 +242,7 @@ public class ImageUrlUtils {
 
     // Methods for Cart
     public void addCartListImageUri(String wishlistImageUri) {
-        this.cartListImageUri.add(0,wishlistImageUri);
+        this.cartListImageUri.add(0, wishlistImageUri);
     }
 
     public void removeCartListImageUri(int position) {

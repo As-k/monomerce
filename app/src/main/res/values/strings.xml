@@ -21,6 +21,8 @@
     <string name="my_rewards">My Rewards</string>
     <string name="my_orders">My Orders</string>
     <string name="my_cart">My Cart</string>
+    <string name="checkout">Checkout</string>
+    <string name="new_address">Add a new Address</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="my_account">My Account</string>
 
