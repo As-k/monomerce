@@ -21,8 +21,11 @@ import com.allandroidprojects.ecomsample.product.ItemDetailsActivity;
 import com.allandroidprojects.ecomsample.startup.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.githang.stepview.StepView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_POSITION;
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_URI;
@@ -30,7 +33,7 @@ import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRI
 public class CartListActivity extends AppCompatActivity {
     private static Context mContext;
     TextView checkOutAction;
-
+    StepView mStepView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,11 @@ public class CartListActivity extends AppCompatActivity {
         ArrayList<String> cartlistImageUri = imageUrlUtils.getCartListImageUri();
         //Show cart layout based on items
         setCartLayout();
+
+
+        List<String> steps = Arrays.asList(new String[]{"Selected Items", "Shipping Address", "Review Your Order"});
+        mStepView.setSteps(steps);
+        mStepView.selectedStep(1);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerview);
         RecyclerView.LayoutManager recylerViewLayoutManager = new LinearLayoutManager(mContext);
@@ -142,12 +150,14 @@ public class CartListActivity extends AppCompatActivity {
         LinearLayout layoutCartItems = (LinearLayout) findViewById(R.id.layout_items);
         LinearLayout layoutCartPayments = (LinearLayout) findViewById(R.id.layout_payment);
         LinearLayout layoutCartNoItems = (LinearLayout) findViewById(R.id.layout_cart_empty);
+        mStepView = (StepView) findViewById(R.id.step_view);
         checkOutAction = findViewById(R.id.text_action_bottom2);
 
         if (MainActivity.notificationCountCart >0) {
             layoutCartNoItems.setVisibility(View.GONE);
             layoutCartItems.setVisibility(View.VISIBLE);
             layoutCartPayments.setVisibility(View.VISIBLE);
+            mStepView.setVisibility(View.VISIBLE);
             checkOutAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -159,6 +169,7 @@ public class CartListActivity extends AppCompatActivity {
             layoutCartNoItems.setVisibility(View.VISIBLE);
             layoutCartItems.setVisibility(View.GONE);
             layoutCartPayments.setVisibility(View.GONE);
+            mStepView.setVisibility(View.GONE);
 
             Button bStartShopping = (Button) findViewById(R.id.bAddNew);
             bStartShopping.setOnClickListener(new View.OnClickListener() {

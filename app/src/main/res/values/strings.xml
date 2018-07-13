@@ -23,6 +23,7 @@
     <string name="my_cart">My Cart</string>
     <string name="checkout">Checkout</string>
     <string name="new_address">Add a new Address</string>
+    <string name="payment">Payment</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="my_account">My Account</string>
 

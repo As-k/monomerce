@@ -33,4 +33,5 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.merhold.extensiblepageindicator:extensiblepageindicator:1.0.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    compile 'com.githang:stepview:0.1'
 }

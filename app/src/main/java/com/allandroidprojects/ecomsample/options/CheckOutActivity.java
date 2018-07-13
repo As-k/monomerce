@@ -22,14 +22,17 @@ import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.entites.Address;
 import com.allandroidprojects.ecomsample.payment.PaymentActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.githang.stepview.StepView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CheckOutActivity extends AppCompatActivity {
     private static Context mContext;
     TextView newAddressBtn;
     RecyclerView recyclerView;
-    ArrayList<Address> addresses;
+    ArrayList<String> addresses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,11 @@ public class CheckOutActivity extends AppCompatActivity {
         Address newAddress = new Address();
         addresses = newAddress.getAddressList();
         init();
+        StepView mStepView = (StepView) findViewById(R.id.step_view);
+        List<String> steps = Arrays.asList(new String[]{"Selected Items", "Shipping Address", "Review Your Order"});
+        mStepView.setSteps(steps);
+        mStepView.selectedStep(2);
+
         recyclerView = (RecyclerView)findViewById(R.id.recyclerview_address);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(new CheckOutActivity.AddressRecyclerViewAdapter(recyclerView, addresses));
@@ -60,7 +68,7 @@ public class CheckOutActivity extends AppCompatActivity {
 
     public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<CheckOutActivity.AddressRecyclerViewAdapter.ViewHolder> {
 
-        private ArrayList<Address> mAddresslist;
+        private ArrayList<String> mAddresslist;
         private RecyclerView mRecyclerView;
 
         String[] add = {"4th Floor, Venkateshwara Heritage, Kudlu Hosa Road, Opp Sai Purna Premium Apartment, Sai Meadows, Kudlu, Bengaluru, Karnataka 560068",
@@ -81,7 +89,7 @@ public class CheckOutActivity extends AppCompatActivity {
             }
         }
 
-        public AddressRecyclerViewAdapter(RecyclerView recyclerView, ArrayList<Address> addresses) {
+        public AddressRecyclerViewAdapter(RecyclerView recyclerView, ArrayList<String> addresses) {
             mRecyclerView = recyclerView;
             mAddresslist = addresses;
         }
@@ -95,8 +103,9 @@ public class CheckOutActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-//            Address address = mAddresslist.get(position);
-//            holder.addresstxt.setText(address.getBuyerName()+"\n"+address.getStreet()+"\n"+address.getCity()+", "+address.getState()+" "+address.getPincode()+"\n"+address.getMobile());
+//            String address = (String)mAddresslist.get(position);
+////            holder.addresstxt.setText(address.getBuyerName()+"\n"+address.getStreet()+"\n"+address.getCity()+", "+address.getState()+" "+address.getPincode()+"\n"+address.getMobile());
+//            holder.addresstxt.setText(address);
             holder.addresstxt.setText(add[position]);
             holder.deliveryAction.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Address {
     public String city, street, pincode, state, buyerName, mobile;
-    ArrayList<Address> addressList = new ArrayList<>();
+    ArrayList<String> addressList = new ArrayList<>();
 
     public Address() {
     }
@@ -70,9 +70,10 @@ public class Address {
         this.mobile = mobile;
     }
 
-    public void addAddressList(Address addresslist) {
-        this.addressList.add(0, addresslist);
+    public void addAddressList(String addresslist) {
+        this.addressList.add(addresslist);
     }
-    public ArrayList<Address> getAddressList(){ return this.addressList; }
+
+    public ArrayList<String> getAddressList(){ return this.addressList; }
 
 }

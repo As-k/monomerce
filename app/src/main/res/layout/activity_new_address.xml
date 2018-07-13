@@ -44,7 +44,7 @@
                                 android:layout_width="match_parent"
                                 android:id="@+id/address_city"
                                 android:hint="City*"
-                                android:inputType="textCapWords"
+                                android:inputType="textPostalAddress"
                                 style="@style/edit_text_style"/>
                         </android.support.design.widget.TextInputLayout>
                         <TextView
@@ -64,7 +64,7 @@
                                 android:layout_width="match_parent"
                                 android:id="@+id/address_street"
                                 android:hint="Street*"
-                                android:inputType="textCapWords"
+                                android:inputType="textPostalAddress"
                                 style="@style/edit_text_style"/>
                         </android.support.design.widget.TextInputLayout>
                         <TextView
@@ -88,7 +88,8 @@
                                 android:layout_width="match_parent"
                                 android:id="@+id/address_pincode"
                                 android:hint="Pincode*"
-                                android:inputType="textCapWords"
+                                android:inputType="number"
+                                android:maxLength="6"
                                 style="@style/edit_text_style"/>
                         </android.support.design.widget.TextInputLayout>
                         <TextView
@@ -106,7 +107,7 @@
                                     android:layout_width="match_parent"
                                     android:id="@+id/address_state"
                                     android:hint="State*"
-                                    android:inputType="textCapWords"
+                                    android:inputType="textPostalAddress"
                                     style="@style/edit_text_style"/>
                             </android.support.design.widget.TextInputLayout>
                             <TextView
@@ -155,7 +156,8 @@
                                 android:layout_width="match_parent"
                                 android:id="@+id/address_mob"
                                 android:hint="10-digit mobile number*"
-                                android:inputType="textCapWords"
+                                android:inputType="number"
+                                android:maxLength="10"
                                 style="@style/edit_text_style"/>
                         </android.support.design.widget.TextInputLayout>
                         <TextView
@@ -165,7 +167,7 @@
             </LinearLayout>
                 <LinearLayout android:id="@+id/save_new_address"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:orientation="horizontal"
                     android:weightSum="2"
@@ -173,13 +175,24 @@
                     android:background="@color/orange_light"
                     >
 
-                    <TextView android:id="@+id/add__new_address"
+                    <TextView android:id="@+id/add_new_address"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="SAVE"
                         android:textSize="14dp"
                         android:textColor="@color/gen_white"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+
+                    <TextView android:id="@+id/continue_payment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Continue Payment"
+                        android:textSize="14dp"
+                        android:textColor="@color/gen_white"
+                        android:background="@color/bg_screen1"
                         android:textStyle="bold"
                         android:gravity="center"/>
 

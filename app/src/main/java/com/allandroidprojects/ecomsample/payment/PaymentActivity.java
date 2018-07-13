@@ -15,19 +15,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.options.CartListActivity;
 import com.allandroidprojects.ecomsample.product.ItemDetailsActivity;
-import com.allandroidprojects.ecomsample.startup.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.githang.stepview.StepView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_POSITION;
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_URI;
 
 public class PaymentActivity extends AppCompatActivity {
     private static Context mContext;
+    TextView selectedAddress;
+
 
 
     @Override
@@ -43,12 +46,19 @@ public class PaymentActivity extends AppCompatActivity {
         ArrayList<String> cartlistImageUri = imageUrlUtils.getCartListImageUri();
         //Show cart layout based on items
 //        setCartLayout();
+        StepView mStepView = (StepView) findViewById(R.id.step_view);
+        List<String> steps = Arrays.asList(new String[]{"Selected Items", "Shipping Address", "Review Your Order"});
+        mStepView.setSteps(steps);
+        mStepView.selectedStep(3);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerview_payment);
         RecyclerView.LayoutManager recylerViewLayoutManager = new LinearLayoutManager(mContext);
 
         recyclerView.setLayoutManager(recylerViewLayoutManager);
         recyclerView.setAdapter(new PaymentActivity.PaymentRecyclerViewAdapter(recyclerView, cartlistImageUri));
+
+        selectedAddress = findViewById(R.id.selected_address);
+        selectedAddress.setText(address);
 
     }
 
@@ -61,7 +71,7 @@ public class PaymentActivity extends AppCompatActivity {
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final SimpleDraweeView mImageView;
-            public final LinearLayout mLayoutItem, mLayoutRemove , mLayoutEdit;
+            public final LinearLayout mLayoutItem;
             TextView actualPrice, discountPercentage;
 
             public ViewHolder(View view) {
@@ -72,8 +82,6 @@ public class PaymentActivity extends AppCompatActivity {
                 actualPrice =  view.findViewById(R.id.actual_price);
                 actualPrice.setPaintFlags(actualPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
                 discountPercentage =  view.findViewById(R.id.discount_percentage);
-                mLayoutRemove = (LinearLayout) view.findViewById(R.id.layout_action1);
-                mLayoutEdit = (LinearLayout) view.findViewById(R.id.layout_action2);
             }
         }
 
@@ -84,7 +92,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         @Override
         public PaymentActivity.PaymentRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cartlist_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cartlist_payment, parent, false);
             return new PaymentActivity.PaymentRecyclerViewAdapter.ViewHolder(view);
         }
 
@@ -107,31 +115,31 @@ public class PaymentActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ItemDetailsActivity.class);
-                    intent.putExtra(STRING_IMAGE_URI,mCartlistImageUri.get(position));
+                    intent.putExtra(STRING_IMAGE_URI, mCartlistImageUri.get(position));
                     intent.putExtra(STRING_IMAGE_POSITION, position);
                     mContext.startActivity(intent);
                 }
             });
 
-            //Set click action
-            holder.mLayoutRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-                    imageUrlUtils.removeCartListImageUri(position);
-                    notifyDataSetChanged();
-                    //Decrease notification count
-                    MainActivity.notificationCountCart--;
-
-                }
-            });
-
-            //Set click action
-            holder.mLayoutEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                }
-            });
+//            //Set click action
+//            holder.mLayoutRemove.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
+//                    imageUrlUtils.removeCartListImageUri(position);
+//                    notifyDataSetChanged();
+//                    //Decrease notification count
+//                    MainActivity.notificationCountCart--;
+//
+//                }
+//            });
+//
+//            //Set click action
+//            holder.mLayoutEdit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                }
+//            });
         }
 
         @Override

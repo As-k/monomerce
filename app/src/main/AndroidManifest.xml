@@ -57,11 +57,12 @@
         <activity android:name=".miscellaneous.EmptyActivity" />
         <activity
             android:name=".options.CheckOutActivity"
-            android:label="@string/new_address" />
+            android:label="@string/checkout" />
         <activity
             android:name=".options.NewAddressActivity"
             android:label="@string/new_address"></activity>
-        <activity android:name=".payment.PaymentActivity"></activity>
+        <activity android:name=".payment.PaymentActivity"
+            android:label="@string/payment"></activity>
     </application>
 
 </manifest>
