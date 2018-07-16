@@ -34,4 +34,5 @@ dependencies {
     compile 'com.merhold.extensiblepageindicator:extensiblepageindicator:1.0.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.githang:stepview:0.1'
+    implementation 'org.michaelbel:bottomsheet:1.2.2'
 }

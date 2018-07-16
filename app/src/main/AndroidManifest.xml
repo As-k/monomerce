@@ -60,9 +60,15 @@
             android:label="@string/checkout" />
         <activity
             android:name=".options.NewAddressActivity"
-            android:label="@string/new_address"></activity>
-        <activity android:name=".payment.PaymentActivity"
-            android:label="@string/payment"></activity>
+            android:label="@string/new_address" />
+        <activity
+            android:name=".payment.PaymentActivity"
+            android:label="@string/payment" />
+        <activity
+            android:name=".fragments.AllItemsShowActivity"
+            android:label="@string/title_activity_all_items_show"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".fragments.FilterItemsActivity"></activity>
     </application>
 
 </manifest>

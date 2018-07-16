@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.allandroidprojects.ecomsample.fragments.FilterItemsActivity">
+
+    <LinearLayout android:id="@+id/activity_category_list"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <LinearLayout android:id="@+id/layout_items"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:background="#f7f7f7"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/text_view_style"
+                android:text="Filter By"
+                android:padding="@dimen/margin_small"
+                android:layout_marginStart="0dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f7f7f7"
+                android:orientation="horizontal"
+                >
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:background="#f7f7f7"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/text_view_style"
+                        android:text="Category"
+                        android:padding="20dp"
+                        android:layout_marginStart="0dp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/text_view_style"
+                        android:text="Brand"
+                        android:padding="20dp"
+                        android:layout_marginStart="0dp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/text_view_style"
+                        android:text="Filter By"
+                        android:padding="20dp"
+                        android:layout_marginStart="0dp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/text_view_style"
+                        android:text="Size"
+                        android:padding="20dp"
+                        android:layout_marginStart="0dp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/text_view_style"
+                        android:text="Type"
+                        android:padding="20dp"
+                        android:layout_marginStart="0dp"
+                        />
+
+
+                </LinearLayout>
+
+                <fragment
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filter_fragment"
+                    />
+
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/layout_payment"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:background="@color/gen_black"
+            android:visibility="visible">
+            <Button android:id="@+id/show_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/orange_light"
+                android:text="Show Result"
+                android:textAllCaps="false"
+                android:textSize="14dp"
+                android:textColor="@color/gen_white"
+                android:textStyle="bold"
+                android:gravity="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

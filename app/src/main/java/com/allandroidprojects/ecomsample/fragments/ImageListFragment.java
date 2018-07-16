@@ -17,16 +17,21 @@
 package com.allandroidprojects.ecomsample.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allandroidprojects.ecomsample.R;
@@ -35,12 +40,16 @@ import com.allandroidprojects.ecomsample.startup.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.michaelbel.bottomsheet.BottomSheet;
+
 
 public class ImageListFragment extends Fragment {
 
     public static final String STRING_IMAGE_URI = "ImageUri";
     public static final String STRING_IMAGE_POSITION = "ImagePosition";
     private static MainActivity mActivity;
+    TextView moreItems;
+//    Button sortBtn, filterBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,11 +59,80 @@ public class ImageListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.layout_recylerview_list, container, false);
-        setupRecyclerView(rv);
-        return rv;
+        View v = inflater.inflate(R.layout.layout_recylerview_list, container, false);
+
+        clickBtn(v);
+        return v;
     }
 
+    public void clickBtn(View view){
+        RecyclerView recyclerViewList = view.findViewById(R.id.recyclerview_list);
+        moreItems = view.findViewById(R.id.more_items);
+//        sortBtn = view.findViewById(R.id.sort_action_button);
+//        filterBtn = view.findViewById(R.id.filter_action_button);
+        setupRecyclerView(recyclerViewList);
+//        sortBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final TextView sortNew, sortPopular, sortLowToHigh, sortHighToLow;
+//                View lv = getLayoutInflater().inflate(R.layout.layout_sort_items, null, false);
+//                sortNew = lv.findViewById(R.id.sort_new);
+//                sortPopular = lv.findViewById(R.id.sort_popular);
+//                sortLowToHigh = lv.findViewById(R.id.sort_lowToHigh);
+//                sortHighToLow = lv.findViewById(R.id.sort_highToLow);
+//
+//                final BottomSheet.Builder bsb = new BottomSheet.Builder(getContext());
+//                bsb.setView(lv);
+//
+//                sortNew.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        sortNew.setTextColor(Color.parseColor("#f2563e"));
+//                        sortPopular.setTextColor(Color.parseColor("#213858"));
+//                        sortLowToHigh.setTextColor(Color.parseColor("#213858"));
+//                        sortHighToLow.setTextColor(Color.parseColor("#213858"));
+//                        bsb.dismiss();
+//                    }
+//                });
+//                sortPopular.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        sortNew.setTextColor(Color.parseColor("#213858"));
+//                        sortPopular.setTextColor(Color.parseColor("#f2563e"));
+//                        sortLowToHigh.setTextColor(Color.parseColor("#213858"));
+//                        sortHighToLow.setTextColor(Color.parseColor("#213858"));
+//                        bsb.dismiss();
+//                    }
+//                });
+//                sortLowToHigh.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        sortNew.setTextColor(Color.parseColor("#213858"));
+//                        sortPopular.setTextColor(Color.parseColor("#213858"));
+//                        sortLowToHigh.setTextColor(Color.parseColor("#f2563e"));
+//                        sortHighToLow.setTextColor(Color.parseColor("#213858"));
+//                        bsb.dismiss();
+//                    }
+//                });
+//                sortHighToLow.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        sortNew.setTextColor(Color.parseColor("#213858"));
+//                        sortPopular.setTextColor(Color.parseColor("#213858"));
+//                        sortLowToHigh.setTextColor(Color.parseColor("#213858"));
+//                        sortHighToLow.setTextColor(Color.parseColor("#f2563e"));
+//                        bsb.dismiss();
+//                    }
+//                });
+//                bsb.show();
+//            }
+//        });
+    }
+
+
+
+    String[] items = null;
+    String fragmentName = "";
     private void setupRecyclerView(RecyclerView recyclerView) {
       /*  if (ImageListFragment.this.getArguments().getInt("type") == 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -66,23 +144,38 @@ public class ImageListFragment extends Fragment {
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
         }*/
-        String[] items=null;
+
         if (ImageListFragment.this.getArguments().getInt("type") == 1){
             items =ImageUrlUtils.getOffersUrls();
+            fragmentName = getString(R.string.item_1);
         }else if (ImageListFragment.this.getArguments().getInt("type") == 2){
             items =ImageUrlUtils.getElectronicsUrls();
+            fragmentName = getString(R.string.item_2);
         }else if (ImageListFragment.this.getArguments().getInt("type") == 3){
             items =ImageUrlUtils.getLifeStyleUrls();
+            fragmentName = getString(R.string.item_3);
         }else if (ImageListFragment.this.getArguments().getInt("type") == 4){
-            items =ImageUrlUtils.getHomeApplianceUrls();
+            items = ImageUrlUtils.getHomeApplianceUrls();
+            fragmentName = getString(R.string.item_4);
         }else if (ImageListFragment.this.getArguments().getInt("type") == 5){
             items =ImageUrlUtils.getBooksUrls();
+            fragmentName = getString(R.string.item_5);
         }else {
             items = ImageUrlUtils.getImageUrls();
+            fragmentName = getString(R.string.item_6);
         }
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(recyclerView, items));
+
+        moreItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContext().startActivity(new Intent(getContext(), AllItemsShowActivity.class)
+                        .putExtra("items", items)
+                        .putExtra("fragmentName", fragmentName));
+            }
+        });
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -168,7 +261,7 @@ public class ImageListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mValues.length;
+            return mValues.length>10 ? 10 : mValues.length;
         }
     }
 }

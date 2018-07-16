@@ -58,5 +58,6 @@
         slider -> clear data
     </string>
     <string name="play_again">Play Again</string>
+    <string name="title_activity_all_items_show">AllItemsShowActivity</string>
 
 </resources>
