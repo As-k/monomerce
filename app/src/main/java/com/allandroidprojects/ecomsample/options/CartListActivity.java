@@ -67,8 +67,9 @@ public class CartListActivity extends AppCompatActivity {
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final SimpleDraweeView mImageView;
-            public final LinearLayout mLayoutItem, mLayoutRemove , mLayoutEdit;
-            TextView actualPrice, discountPercentage;
+            public final LinearLayout mLayoutItem, mLayoutRemove;
+            TextView actualPrice, discountPercentage, itemsQuantity;
+            ImageView itemsQuantityAdd, itemsQuantityRemove;
 
             public ViewHolder(View view) {
                 super(view);
@@ -79,7 +80,10 @@ public class CartListActivity extends AppCompatActivity {
                 actualPrice.setPaintFlags(actualPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
                 discountPercentage =  view.findViewById(R.id.discount_percentage);
                 mLayoutRemove = (LinearLayout) view.findViewById(R.id.layout_action1);
-                mLayoutEdit = (LinearLayout) view.findViewById(R.id.layout_action2);
+                itemsQuantity =  view.findViewById(R.id.items_quantity);
+                itemsQuantityAdd =  view.findViewById(R.id.items_quantity_add);
+                itemsQuantityRemove =  view.findViewById(R.id.items_quantity_remove);
+
             }
         }
 
@@ -133,9 +137,29 @@ public class CartListActivity extends AppCompatActivity {
             });
 
             //Set click action
-            holder.mLayoutEdit.setOnClickListener(new View.OnClickListener() {
+            holder.itemsQuantityRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String quan = holder.itemsQuantity.getText().toString();
+                    int quantRemove = Integer.parseInt(quan);
+                    if (quantRemove==0) {
+                        ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
+                        imageUrlUtils.removeCartListImageUri(position);
+                        notifyDataSetChanged();
+                        //Decrease notification count
+                        MainActivity.notificationCountCart--;
+                    } else
+                        quantRemove--;
+                    holder.itemsQuantity.setText(quantRemove+"");
+                }
+            });
+            holder.itemsQuantityAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String quan = holder.itemsQuantity.getText().toString();
+                    int quantAdd = Integer.parseInt(quan);
+                    quantAdd++;
+                    holder.itemsQuantity.setText(quantAdd+"");
                 }
             });
         }

@@ -68,7 +68,8 @@
             android:name=".fragments.AllItemsShowActivity"
             android:label="@string/title_activity_all_items_show"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".fragments.FilterItemsActivity"></activity>
+        <activity android:name=".fragments.FilterItemsActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

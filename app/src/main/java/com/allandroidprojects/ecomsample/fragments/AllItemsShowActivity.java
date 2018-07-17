@@ -128,6 +128,14 @@ public class AllItemsShowActivity extends AppCompatActivity {
                 bsb.show();
             }
         });
+
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, FilterItemsActivity.class));
+            }
+        });
+
     }
 
     public void setupRecyclerView(RecyclerView recyclerView, String[] items) {
