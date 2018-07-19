@@ -29,7 +29,7 @@ public class WishlistActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_recylerview_list);
+        setContentView(R.layout.activity_wishlist);
         mContext = WishlistActivity.this;
 
         ImageUrlUtils imageUrlUtils = new ImageUrlUtils();

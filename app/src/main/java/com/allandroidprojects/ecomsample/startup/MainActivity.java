@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -22,17 +23,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.allandroidprojects.ecomsample.BackendServer;
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.entites.GenericProduct;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.miscellaneous.EmptyActivity;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
 import com.allandroidprojects.ecomsample.options.CartListActivity;
 import com.allandroidprojects.ecomsample.options.SearchResultActivity;
 import com.allandroidprojects.ecomsample.options.WishlistActivity;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.merhold.extensiblepageindicator.ExtensiblePageIndicator;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,10 +56,19 @@ public class MainActivity extends AppCompatActivity
     private ViewPager mViewPager;
     private ExtensiblePageIndicator extensiblePageIndicator;
 
+    AsyncHttpClient client;
+
+    ArrayList<GenericProduct> genericProducts;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        client = new AsyncHttpClient();
+        genericProducts = new ArrayList<GenericProduct>();
+        getGenericProduct();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,10 +101,7 @@ public class MainActivity extends AppCompatActivity
          viewPager = (ViewPager) findViewById(R.id.viewpager);
          tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
-        }
+
 
         /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -95,11 +112,25 @@ public class MainActivity extends AppCompatActivity
                 }
             });*/
 
+
         initCollapsingToolbar();
         getViewpagerFragment();
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (viewPager != null) {
+                    setupViewPager(viewPager);
+                    tabLayout.setupWithViewPager(viewPager);
+                }
+            }
+        },5000);
+
+
 
     }
+
 
     @Override
     protected void onResume() {
@@ -163,38 +194,67 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void getGenericProduct() {
+        client.get(BackendServer.url+"/api/ecommerce/genericProduct/",new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+                for (int i=0; i<response.length(); i++) {
+                    try {
+                        JSONObject object = response.getJSONObject(i);
+                        GenericProduct product = new GenericProduct(object);
+                        genericProducts.add(product);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        ImageListFragment fragment = new ImageListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", 1);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_1));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 2);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_2));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 3);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_3));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 4);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_4));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 5);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_5));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 6);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_6));
+
+        int value=0;
+        for (int i=0; i<genericProducts.size(); i++) {
+            ImageListFragment fragment = new ImageListFragment();
+            Bundle bundle = new Bundle();
+            GenericProduct product = genericProducts.get(i);
+            bundle.putInt("type", i+1);
+            fragment.setArguments(bundle);
+            adapter.addFragment(fragment, product.getName());
+        }
+//        fragment = new ImageListFragment();
+//        bundle = new Bundle();
+//        bundle.putInt("type", 2);
+//        fragment.setArguments(bundle);
+//        adapter.addFragment(fragment, getString(R.string.item_2));
+//        fragment = new ImageListFragment();
+//        bundle = new Bundle();
+//        bundle.putInt("type", 3);
+//        fragment.setArguments(bundle);
+//        adapter.addFragment(fragment, getString(R.string.item_3));
+//        fragment = new ImageListFragment();
+//        bundle = new Bundle();
+//        bundle.putInt("type", 4);
+//        fragment.setArguments(bundle);
+//        adapter.addFragment(fragment, getString(R.string.item_4));
+//        fragment = new ImageListFragment();
+//        bundle = new Bundle();
+//        bundle.putInt("type", 5);
+//        fragment.setArguments(bundle);
+//        adapter.addFragment(fragment, getString(R.string.item_5));
+//        fragment = new ImageListFragment();
+//        bundle = new Bundle();
+//        bundle.putInt("type", 6);
+//        fragment.setArguments(bundle);
+//        adapter.addFragment(fragment, getString(R.string.item_6));
         viewPager.setAdapter(adapter);
     }
 
